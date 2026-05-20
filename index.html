@@ -370,14 +370,14 @@
           '<div class="member-head">' +
           '<div class="avatar">' + initial + '</div>' +
           '<div><div class="member-name">' + esc(traveler.name || '') + '</div>' +
-          (traveler.phone ? '<div><a class="tel" href="tel:' + esc(String(traveler.phone).replace(/\s/g, '')) + '">' + esc(traveler.phone) + '</a></div>' : '') +
+          (traveler.phone && traveler.showPhoneInQR !== false ? '<div><a class="tel" href="tel:' + esc(String(traveler.phone).replace(/\s/g, '')) + '">' + esc(traveler.phone) + '</a></div>' : '') +
           '</div></div>';
         
-        if (traveler.hotel || traveler.hotelAddress) {
+        if ((traveler.hotel || traveler.hotelAddress) && traveler.showHotelInQR !== false) {
           html += row('Hotel', traveler.hotel, false) + row('Address', traveler.hotelAddress, false);
         }
         
-        if (traveler.emergencyContact || traveler.emergencyPhone) {
+        if ((traveler.emergencyContact || traveler.emergencyPhone) && traveler.showEmergencyInQR !== false) {
           html += '<div class="emergency">' +
                   '<div class="badge">Emergency / ایمرجنسی</div>' +
                   row('Contact', traveler.emergencyContact, false) +
@@ -386,7 +386,7 @@
         }
         
         const hasMedical = traveler.bloodType || traveler.medicalConditions || traveler.medications || traveler.allergies;
-        if (hasMedical) {
+        if (hasMedical && traveler.showMedicalInQR !== false) {
           html += '<div class="medical">' +
                   '<div class="badge medical-badge">Medical / میڈیکل</div>';
           if (traveler.bloodType) html += row('Blood Type', traveler.bloodType, false);
@@ -398,15 +398,15 @@
         
         html += '</div>';
         
-        // Show group leader if available
-        if (json.leader) {
+        // Show group leader if available and enabled
+        if (json.leader && traveler.showLeaderInQR !== false) {
           html += '<div class="section-title">Group Leader / گروپ لیڈر</div>';
           html += renderLeader(json.leader);
         }
         
-        // Show other travelers if available
+        // Show other travelers if available and enabled
         const otherTravelers = Array.isArray(json.travelers) ? json.travelers : [];
-        if (otherTravelers.length > 0) {
+        if (otherTravelers.length > 0 && traveler.showOtherTravelersInQR !== false) {
           html += '<div class="section-title">Other Travelers (' + otherTravelers.length + ')</div>';
           otherTravelers.forEach(function (t) {
             html += renderMember(t);
