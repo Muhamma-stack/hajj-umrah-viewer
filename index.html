@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="format-detection" content="telephone=no, address=no, email=no" />
+  <meta name="theme-color" content="#0d4f3c" />
+  <title>Hajj / Umrah — Group wristband</title>
+  <style>
+    :root {
+      --forest: #0d4f3c;
+      --forest-mid: #1a6b52;
+      --emerald: #2a9d6e;
+      --gold: #c9a227;
+      --gold-soft: rgba(201, 162, 39, 0.18);
+      --sand: #f4efe6;
+      --card: #ffffff;
+      --text: #14221c;
+      --muted: #5a6b62;
+      --danger: #b71c1c;
+      --radius: 16px;
+      --shadow: 0 8px 28px rgba(13, 79, 60, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(180deg, var(--sand) 0%, #ebe4d8 100%);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 16px;
+      padding-bottom: max(28px, env(safe-area-inset-bottom));
+      min-height: 100vh;
+    }
+    .wrap { max-width: 520px; margin: 0 auto; }
+    .ribbon {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .ribbon svg { width: 18px; height: 18px; opacity: 0.9; }
+    h1 {
+      font-size: 1.5rem;
+      margin: 0 0 6px;
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .sub {
+      color: rgba(255,255,255,0.9);
+      font-size: 0.92rem;
+      margin: 0;
+      line-height: 1.45;
+    }
+    .sub-ur {
+      color: rgba(255,255,255,0.82);
+      font-size: 0.85rem;
+      margin-top: 8px;
+      font-style: normal;
+    }
+    .banner {
+      background: linear-gradient(135deg, var(--emerald) 0%, var(--forest) 55%, var(--forest-mid) 100%);
+      color: #fff;
+      padding: 22px 20px;
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .banner::after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      top: -40px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+    }
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(13, 79, 60, 0.08);
+    }
+    .leader-card {
+      background: linear-gradient(145deg, #fffef8 0%, var(--gold-soft) 100%);
+      border: 1px solid rgba(201, 162, 39, 0.35);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--gold);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .hotel-block {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed rgba(13, 79, 60, 0.2);
+    }
+    .hotel-block .mini {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--forest);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 104px 1fr;
+      gap: 8px 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eef2f0;
+      font-size: 0.95rem;
+    }
+    .row:last-child { border-bottom: none; }
+    .label { color: var(--muted); font-weight: 700; font-size: 0.82rem; }
+    .value { word-break: break-word; font-weight: 500; }
+    .plain-txt { -webkit-touch-callout: none; }
+    a.tel {
+      color: #0d5c7a;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    .section-title {
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: var(--forest);
+      margin: 22px 0 8px;
+      letter-spacing: -0.02em;
+    }
+    .section-hint {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0 0 14px;
+    }
+    .member { margin-bottom: 12px; }
+    .member-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(42, 157, 110, 0.25), rgba(13, 79, 60, 0.15));
+      color: var(--forest);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.15rem;
+      border: 2px solid rgba(42, 157, 110, 0.35);
+    }
+    .member-name { font-weight: 800; font-size: 1.02rem; color: var(--text); }
+    .emergency {
+      background: linear-gradient(180deg, #fff5f5 0%, #ffe8e8 100%);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-top: 10px;
+      border: 1px solid #ffc9c9;
+    }
+    .emergency .badge { color: var(--danger); margin-bottom: 8px; }
+    .medical {
+      background: linear-gradient(180deg, #f0f9f4 0%, #e0f2e9 100%);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-top: 10px;
+      border: 1px solid #b8e0cc;
+    }
+    .medical .medical-badge { color: var(--emerald); margin-bottom: 8px; }
+    .footer-note {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 20px;
+      padding: 0 8px;
+      line-height: 1.4;
+    }
+    .error {
+      text-align: center;
+      padding: 48px 16px;
+      color: var(--muted);
+    }
+    .error strong { color: var(--danger); display: block; margin-bottom: 10px; font-size: 1.05rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app"></div>
+  <script>
+    function b64ToUtf8(b64) {
+      const bin = atob(b64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return new TextDecoder().decode(bytes);
+    }
+    function normalizeB64(s) {
+      let x = String(s).replace(/-/g, '+').replace(/_/g, '/');
+      const pad = x.length % 4;
+      if (pad === 2) x += '==';
+      else if (pad === 3) x += '=';
+      return x;
+    }
+    function esc(s) {
+      if (s == null) return '';
+      const d = document.createElement('div');
+      d.textContent = String(s);
+      return d.innerHTML;
+    }
+    function row(label, value, isPhone) {
+      if (!value) return '';
+      const v = isPhone
+        ? '<a class="tel" href="tel:' + esc(String(value).replace(/\s/g, '')) + '">' + esc(value) + '</a>'
+        : '<span class="plain-txt">' + esc(value) + '</span>';
+      return '<div class="row"><span class="label">' + esc(label) + '</span><span class="value">' + v + '</span></div>';
+    }
+    function renderLeader(L) {
+      if (!L || typeof L !== 'object') return '';
+      const name = L.fullName || '';
+      return (
+        '<div class="card leader-card">' +
+        '<div class="badge">&#10004; Group leader / گروپ لیڈر</div>' +
+        row('Name / نام', name, false) +
+        row('Phone / فون', L.phone, true) +
+        row('Group / گروپ', L.groupName, false) +
+        '<div class="hotel-block">' +
+        '<div class="mini">Stay / قیام</div>' +
+        row('Hotel', L.hotel, false) +
+        row('Address', L.hotelAddress, false) +
+        row('Hotel phone', L.hotelPhone, true) +
+        row('Room', L.roomNumber, false) +
+        '</div></div>'
+      );
+    }
+    function renderGroup(g) {
+      if (!g || typeof g !== 'object') return '';
+      return (
+        '<div class="card">' +
+        '<div class="badge">Group record</div>' +
+        '<h2 style="margin:0 0 12px;font-size:1.25rem;color:var(--forest)">' + esc(g.name || 'Group') + '</h2>' +
+        row('Leader', g.leaderName, false) +
+        row('Leader phone', g.leaderPhone, true) +
+        '<div class="hotel-block"><div class="mini">Hotel</div>' +
+        row('Hotel', g.hotel, false) +
+        row('Address', g.hotelAddress, false) +
+        row('Hotel phone', g.hotelPhone, true) +
+        row('Room', g.roomNumber, false) +
+        '</div></div>'
+      );
+    }
+    function renderMember(t) {
+      const initial = (t.name && t.name[0]) ? t.name[0].toUpperCase() : '?';
+      let html = (
+        '<div class="card member">' +
+        '<div class="member-head">' +
+        '<div class="avatar">' + esc(initial) + '</div>' +
+        '<div><div class="member-name">' + esc(t.name || '') + '</div>' +
+        (t.phone ? '<div><a class="tel" href="tel:' + esc(String(t.phone).replace(/\s/g, '')) + '">' + esc(t.phone) + '</a></div>' : '') +
+        '</div></div>'
+      );
+      
+      // Show hotel if available
+      if (t.hotel || t.hotelAddress) {
+        html += row('Hotel', t.hotel, false) +
+                row('Address', t.hotelAddress, false);
+      }
+      
+      // Show emergency if available
+      if (t.emergencyContact || t.emergencyPhone) {
+        html += '<div class="emergency">' +
+                '<div class="badge">Emergency / ایمرجنسی</div>' +
+                row('Contact', t.emergencyContact, false) +
+                row('Phone', t.emergencyPhone, true) +
+                '</div>';
+      }
+      
+      // Show medical info if available
+      const hasMedical = t.bloodType || t.medicalConditions || t.medications || t.allergies;
+      if (hasMedical) {
+        html += '<div class="medical">' +
+                '<div class="badge medical-badge">Medical / میڈیکل</div>';
+        if (t.bloodType) {
+          html += row('Blood Type', t.bloodType, false);
+        }
+        if (t.medicalConditions) {
+          html += row('Conditions', t.medicalConditions, false);
+        }
+        if (t.medications) {
+          html += row('Medications', t.medications, false);
+        }
+        if (t.allergies) {
+          html += row('Allergies', t.allergies, false);
+        }
+        html += '</div>';
+      }
+      
+      html += '</div>';
+      return html;
+    }
+    function readPayload() {
+      if (typeof window.__HAJJ_INLINE_B64__ === 'string' && window.__HAJJ_INLINE_B64__.length) {
+        return window.__HAJJ_INLINE_B64__;
+      }
+      const h = window.location.hash || '';
+      if (h.startsWith('#d=')) {
+        return h.substring(4);
+      }
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('d')) return params.get('d') || '';
+      return '';
+    }
+    function main() {
+      const app = document.getElementById('app');
+      const payload = readPayload();
+
+      if (!payload) {
+        app.innerHTML =
+          '<div class="error"><strong>Missing data</strong>Open this page from the wristband QR link (browser). If you see raw JSON, scan with the Hajj Umrah Guide app instead.</div>';
+        return;
+      }
+
+      let json;
+      try {
+        let dec = payload;
+        try { dec = decodeURIComponent(dec); } catch (e) {}
+        const utf8 = b64ToUtf8(normalizeB64(dec));
+        json = JSON.parse(utf8);
+      } catch (e) {
+        app.innerHTML =
+          '<div class="error"><strong>Could not read QR data</strong>' + esc(e.message) + '</div>';
+        return;
+      }
+
+      if (!json || (json.type !== 'group_bundle' && json.type !== 'traveler')) {
+        app.innerHTML =
+          '<div class="error"><strong>Not a valid QR code</strong>This page only shows Hajj/Umrah traveler or group data.</div>';
+        return;
+      }
+
+      // Handle individual traveler QR
+      if (json.type === 'traveler') {
+        let html = '';
+        html += '<div class="banner">' +
+          '<div class="ribbon"><span>Traveler</span></div>' +
+          '<h1>' + esc(json.traveler ? json.traveler.name : json.name || 'Traveler') + '</h1>' +
+          '<p class="sub">Hajj / Umrah — Traveler Information</p>' +
+          '</div>';
+        
+        const traveler = json.traveler || json;
+        const initial = (traveler.name && traveler.name[0]) ? traveler.name[0].toUpperCase() : '?';
+        
+        html += '<div class="card member">' +
+          '<div class="member-head">' +
+          '<div class="avatar">' + initial + '</div>' +
+          '<div><div class="member-name">' + esc(traveler.name || '') + '</div>' +
+          (traveler.phone ? '<div><a class="tel" href="tel:' + esc(String(traveler.phone).replace(/\s/g, '')) + '">' + esc(traveler.phone) + '</a></div>' : '') +
+          '</div></div>';
+        
+        if (traveler.hotel || traveler.hotelAddress) {
+          html += row('Hotel', traveler.hotel, false) + row('Address', traveler.hotelAddress, false);
+        }
+        
+        if (traveler.emergencyContact || traveler.emergencyPhone) {
+          html += '<div class="emergency">' +
+                  '<div class="badge">Emergency / ایمرجنسی</div>' +
+                  row('Contact', traveler.emergencyContact, false) +
+                  row('Phone', traveler.emergencyPhone, true) +
+                  '</div>';
+        }
+        
+        const hasMedical = traveler.bloodType || traveler.medicalConditions || traveler.medications || traveler.allergies;
+        if (hasMedical) {
+          html += '<div class="medical">' +
+                  '<div class="badge medical-badge">Medical / میڈیکل</div>';
+          if (traveler.bloodType) html += row('Blood Type', traveler.bloodType, false);
+          if (traveler.medicalConditions) html += row('Conditions', traveler.medicalConditions, false);
+          if (traveler.medications) html += row('Medications', traveler.medications, false);
+          if (traveler.allergies) html += row('Allergies', traveler.allergies, false);
+          html += '</div>';
+        }
+        
+        html += '</div>';
+        
+        // Show group leader if available
+        if (json.leader) {
+          html += '<div class="section-title">Group Leader / گروپ لیڈر</div>';
+          html += renderLeader(json.leader);
+        }
+        
+        // Show other travelers if available
+        const otherTravelers = Array.isArray(json.travelers) ? json.travelers : [];
+        if (otherTravelers.length > 0) {
+          html += '<div class="section-title">Other Travelers (' + otherTravelers.length + ')</div>';
+          otherTravelers.forEach(function (t) {
+            html += renderMember(t);
+          });
+        }
+        
+        html += '<p class="footer-note">If found, please contact emergency number or hotel.</p>';
+        app.innerHTML = html;
+        return;
+      }
+
+      // Handle group bundle QR
+      const leader = json.leader;
+      const group = json.group;
+      const travelers = Array.isArray(json.travelers) ? json.travelers : [];
+
+      let html = '';
+      html += '<div class="banner">' +
+        '<div class="ribbon"><span>Wristband</span></div>' +
+        '<h1>Hajj / Umrah — group info</h1>' +
+        '<p class="sub">Leader details, hotel stay, and travelers the leader allowed — fine / emergency help on any phone.</p>' +
+        '<p class="sub-ur">لیڈر، ہوٹل، اور وہ ممبر جن کو لیڈر نے اس QR پر رکھا — کسی بھی موبائل کیمرے سے کھل سکتا ہے۔</p>' +
+        '</div>';
+
+      if (leader) html += renderLeader(leader);
+      else if (group) html += renderGroup(group);
+      else {
+        app.innerHTML = '<div class="error"><strong>Invalid payload</strong></div>';
+        return;
+      }
+
+      if (leader && group && group.name) {
+        html += '<p class="section-hint" style="margin-top:6px">Group / گروپ: <strong>' + esc(group.name) + '</strong></p>';
+      }
+
+      html += '<div class="section-title">Travelers on this band (' + travelers.length + ')</div>';
+      html += '<p class="section-hint">Only people the group leader marked for this QR. Tap numbers to call.</p>';
+      html += '<p class="section-hint" style="margin-top:-8px;font-size:0.82rem">وہی اراکین جو لیڈر نے اس کوڈ پر شامل کیے۔</p>';
+
+      if (travelers.length === 0) {
+        html += '<div class="card">No travelers on this code. / اس کوڈ پر کوئی ممبر نہیں۔</div>';
+      } else {
+        travelers.forEach(function (t) {
+          html += renderMember(t);
+        });
+      }
+
+      html += '<p class="footer-note">Printed wristband QR — keep data accurate. For app features install Hajj Umrah Guide.</p>';
+
+      app.innerHTML = html;
+    }
+    main();
+  </script>
+</body>
+</html>
