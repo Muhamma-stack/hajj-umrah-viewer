@@ -137,6 +137,12 @@
       text-decoration: underline;
       font-weight: 600;
     }
+    a.link {
+      color: #2563eb;
+      text-decoration: underline;
+      font-weight: 500;
+      word-break: break-all;
+    }
     .section-title {
       font-size: 1.08rem;
       font-weight: 800;
@@ -224,11 +230,16 @@
       d.textContent = String(s);
       return d.innerHTML;
     }
-    function row(label, value, isPhone) {
+    function row(label, value, isPhone, isUrl) {
       if (!value) return '';
-      const v = isPhone
-        ? '<a class="tel" href="tel:' + esc(String(value).replace(/\s/g, '')) + '">' + esc(value) + '</a>'
-        : '<span class="plain-txt">' + esc(value) + '</span>';
+      let v;
+      if (isPhone) {
+        v = '<a class="tel" href="tel:' + esc(String(value).replace(/\s/g, '')) + '">' + esc(value) + '</a>';
+      } else if (isUrl || (typeof value === 'string' && (value.startsWith('http://') || value.startsWith('https://')))) {
+        v = '<a class="link" href="' + esc(value) + '" target="_blank" rel="noopener">' + esc(value) + '</a>';
+      } else {
+        v = '<span class="plain-txt">' + esc(value) + '</span>';
+      }
       return '<div class="row"><span class="label">' + esc(label) + '</span><span class="value">' + v + '</span></div>';
     }
     function renderLeader(L) {
@@ -243,7 +254,7 @@
         '<div class="hotel-block">' +
         '<div class="mini">Stay / قیام</div>' +
         row('Hotel', L.hotel, false) +
-        row('Address', L.hotelAddress, false) +
+        row('Address', L.hotelAddress, false, true) +
         row('Hotel phone', L.hotelPhone, true) +
         row('Room', L.roomNumber, false) +
         '</div></div>'
@@ -374,7 +385,7 @@
           '</div></div>';
         
         if ((traveler.hotel || traveler.hotelAddress) && traveler.showHotelInQR !== false) {
-          html += row('Hotel', traveler.hotel, false) + row('Address', traveler.hotelAddress, false);
+          html += row('Hotel', traveler.hotel, false) + row('Address', traveler.hotelAddress, false, true);
         }
         
         if ((traveler.emergencyContact || traveler.emergencyPhone) && traveler.showEmergencyInQR !== false) {
